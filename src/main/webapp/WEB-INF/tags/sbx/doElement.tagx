@@ -6,7 +6,6 @@
  xmlns:str="http://jakarta.apache.org/taglibs/string-1.1"
  xmlns:sb="urn:jsptagdir:/WEB-INF/tags/sb">
 
-
  <jsp:output omit-xml-declaration="yes" />
 
 
@@ -23,15 +22,16 @@
   required="false" rtexprvalue="true" description="decorate with admin" />
 
 
+
  <c:if test="${not empty param.debug}">
   <c:set var="debug" value="true" />
  </c:if>
-
- <c:forEach items="${elements}" var="currentElement">
+ <c:forEach items="${elements}" var="currentElement" varStatus="status">
+ 
   <c:set var="element" />
   <c:choose>
    <c:when
-    test="${(not empty type) and currentElement.getElementType().toString() == type }">
+    test="${(not empty type) and currentElement.getType().toString() == type }">
     <c:set var="element" value="${currentElement}" />
    </c:when>
    <c:when
@@ -48,11 +48,11 @@
     <c:if test="${admin }">
      <script>
             jQuery(function($) {
-              console.log("added modal window edef_${element.definitionId}");
+              console.log("added modal window edef_${element.id}");
               $('body')
                   .prepend(
-                      '<div class="modal fade" tabindex="-1" role="dialog" data-target="body" aria-labelledby="updateModal" aria-hidden="true" id="edef_${element.definitionId}"> <div class="modal-dialog"><div class="modal-content">loading content...</div></div></div>');
-              $('#edef_${element.definitionId}').on('shown.bs.modal',
+                      '<div class="modal fade" tabindex="-1" role="dialog" data-target="body" aria-labelledby="updateModal" aria-hidden="true" id="edef_${element.id}"> <div class="modal-dialog"><div class="modal-content">loading content...</div></div></div>');
+              $('#edef_${element.id}').on('shown.bs.modal',
                   function(e) {
                     var form = $(this).find('form');
                     var target = $(this).find(".modal-content");
@@ -79,7 +79,7 @@
     <c:set var="elementInset">/WEB-INF/elementViews/${element.getClass().getSimpleName()}.jspx</c:set>
     <c:set var="element" value="${element }" scope="request" />
     <spring:url var="formUrl"
-     value="/${searchbox.getSlug() }/admin/searchElementDefinition/${element.definitionId}" />
+     value="/admin/${searchbox.getSlug() }/searchElementDefinition/${element.id}" />
 
     <c:choose>
      <c:when test="${admin or debug}">
@@ -90,7 +90,7 @@
          <c:if test="${admin }">
           <button type="button" class="btn btn-default"
            data-toggle="modal" data-remote="${formUrl}"
-           data-target="#edef_${element.definitionId}">
+           data-target="#edef_${element.id}">
            <span class="glyphicon glyphicon-edit"> <!-- edit -->
            </span>
           </button>
@@ -100,21 +100,21 @@
            <c:out value="${fn:replace(element,',',', ') }" />
           </c:set>
           <button type="button" class="btn btn-default"
-           id="debug_${element.getClass().getSimpleName()}"
+           id="debug_${element.getClass().getSimpleName()}_${status.count}"
            data-toggle="popover" title="Element data"
            data-placement="auto" data-content="${debugContent }">
            <span class="glyphicon glyphicon-search"> <!-- search -->
            </span>
           </button>
-          <script>
-                      $('#debug_${element.getClass().getSimpleName()}')
-                          .popover()
-                    </script>
+          <script type="text/javascript">
+            $('#debug_${element.getClass().getSimpleName()}_${status.count}')
+                .popover()
+          </script>
          </c:if>
          <c:if test="${admin }">
           <button type="button" class="btn btn-default"
            data-toggle="modal" data-remote="${formUrl}"
-           data-target="#deldef_${element.definitionId}">
+           data-target="#deldef_${element.id}">
            <span class="glyphicon glyphicon-remove"> <!-- remove -->
            </span>
           </button>

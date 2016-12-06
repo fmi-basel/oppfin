@@ -20,6 +20,7 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -32,10 +33,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.jolbox.bonecp.BoneCPDataSource;
-
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass=true)
 @EnableJpaRepositories("com.searchbox.framework.repository")
 public class DataConfiguration {
 
@@ -55,27 +54,28 @@ public class DataConfiguration {
 
   @Bean
   @DependsOn("entityManagerFactory")
-  public ResourceDatabasePopulator initDatabase(DataSource dataSource) throws Exception {
+  public ResourceDatabasePopulator initDatabase(DataSource dataSource)
+      throws Exception {
     ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-    populator.addScript(new ClassPathResource("data/searchbox.sql"));
-    populator.addScript(new ClassPathResource("org/springframework/batch/core/schema-h2.sql"));
-
+    populator.setContinueOnError(true);
+    populator.addScript(new ClassPathResource("data/oppfinUsers.sql"));
+    populator.addScript(new ClassPathResource("org/springframework/batch/core/schema-mysql.sql"));
+    //populator.addScript(new ClassPathResource("data/spring-batch-h2-schema.sql"));
     populator.populate(dataSource.getConnection());
     return populator;
   }
 
   @Bean
   public DataSource dataSource() {
-    BoneCPDataSource dataSource = new BoneCPDataSource();
-    dataSource.setMinConnectionsPerPartition(5);
-    dataSource.setMaxConnectionsPerPartition(10);
-    dataSource.setPartitionCount(1);
-    dataSource.setConnectionTimeoutInMs(5 * 1000);
-    dataSource.setLazyInit(true);
-    dataSource.setDriverClass(environment.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-    dataSource.setJdbcUrl(environment.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
-    dataSource.setUsername(environment.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
-    dataSource.setPassword(environment.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
+    BasicDataSource dataSource = new BasicDataSource();
+    dataSource.setDriverClassName(environment
+        .getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
+    dataSource.setUrl(environment
+        .getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
+    dataSource.setUsername(environment
+        .getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
+    dataSource.setPassword(environment
+        .getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
 
     return dataSource;
   }
@@ -85,18 +85,19 @@ public class DataConfiguration {
     LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
     entityManagerFactoryBean.setDataSource(dataSource());
-    entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+    entityManagerFactoryBean
+        .setJpaVendorAdapter(new HibernateJpaVendorAdapter());
     entityManagerFactoryBean.setPackagesToScan("com.searchbox.framework");
 
     Properties jpaProperties = new Properties();
-    jpaProperties.put(PROPERTY_NAME_HIBERNATE_DIALECT, 
-            environment.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
+    jpaProperties.put(PROPERTY_NAME_HIBERNATE_DIALECT,
+        environment.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
     jpaProperties.put(PROPERTY_NAME_HIBERNATE_FORMAT_SQL,
         environment.getRequiredProperty(PROPERTY_NAME_HIBERNATE_FORMAT_SQL));
     jpaProperties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO,
         environment.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
-    jpaProperties.put(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY,
-        environment.getRequiredProperty(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY));
+    jpaProperties.put(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY, environment
+        .getRequiredProperty(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY));
     jpaProperties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL,
         environment.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 
@@ -108,7 +109,8 @@ public class DataConfiguration {
   @Bean
   public JpaTransactionManager transactionManager() {
     JpaTransactionManager transactionManager = new JpaTransactionManager();
-    transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+    transactionManager.setEntityManagerFactory(entityManagerFactory()
+        .getObject());
     return transactionManager;
   }
 }

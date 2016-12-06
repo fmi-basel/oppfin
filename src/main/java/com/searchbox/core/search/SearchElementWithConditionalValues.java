@@ -19,61 +19,63 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.searchbox.core.SearchAttribute;
+import com.searchbox.core.SearchElement;
+import com.searchbox.core.SearchElementBean;
 import com.searchbox.core.ref.Order;
 import com.searchbox.core.ref.Sort;
 
 public abstract class SearchElementWithConditionalValues<K extends ConditionalValueElement<T>, T extends AbstractSearchCondition>
-        extends SearchElement implements SearchConditionToElementMerger {
+    extends SearchElementBean implements SearchConditionToElementMerger {
 
-    @SearchAttribute
-    protected Order order = Order.BY_VALUE;
+  @SearchAttribute
+  protected Order order = Order.BY_VALUE;
 
-    @SearchAttribute
-    protected Sort sort = Sort.DESC;
+  @SearchAttribute
+  protected Sort sort = Sort.DESC;
 
-    SortedSet<K> values;
+  SortedSet<K> values;
 
-    @Override
-    public abstract void mergeSearchCondition(AbstractSearchCondition condition);
+  @Override
+  public abstract void mergeSearchCondition(AbstractSearchCondition condition);
 
-    public SearchElementWithConditionalValues() {
-        super(null, SearchElement.Type.UNKNOWN);
-        values = new TreeSet<K>();
-    }
+  public SearchElementWithConditionalValues() {
+    this.setType(SearchElement.Type.UNKNOWN);
+    values = new TreeSet<K>();
+  }
 
-    public SearchElementWithConditionalValues(String label,
-            SearchElement.Type type) {
-        super(label, type);
-        values = new TreeSet<K>();
-    }
+  public SearchElementWithConditionalValues(String label,
+      SearchElement.Type type) {
+    this.setLabel(label);
+    this.setType(type);
+    values = new TreeSet<K>();
+  }
 
-    public SearchElementWithConditionalValues<K, T> addValueElement(
-            K valueElement) {
-        this.values.add(valueElement);
-        return this;
-    }
+  public SearchElementWithConditionalValues<K, T> addValueElement(K valueElement) {
+    this.values.add(valueElement);
+    return this;
+  }
 
-    public SortedSet<K> getValues() {
-        return this.values;
-    }
+  public SortedSet<K> getValues() {
+    return this.values;
+  }
 
-    public void setValues(SortedSet<K> values) {
-        this.values = values;
-    }
+  public void setValues(SortedSet<K> values) {
+    this.values = values;
+  }
 
-    public Order getOrder() {
-        return order;
-    }
+  public Order getOrder() {
+    return order;
+  }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+  public void setOrder(Order order) {
+    this.order = order;
+  }
 
-    public Sort getSort() {
-        return sort;
-    }
+  public Sort getSort() {
+    return sort;
+  }
 
-    public void setSort(Sort sort) {
-        this.sort = sort;
-    }
+  public void setSort(Sort sort) {
+    this.sort = sort;
+  }
 }

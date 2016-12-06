@@ -19,33 +19,32 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import com.searchbox.core.SearchElement;
 import com.searchbox.core.dm.Collection;
 import com.searchbox.core.search.AbstractSearchCondition;
-import com.searchbox.core.search.SearchElement;
 
 public interface SearchEngine<Q, R> {
 
-    String getName();
+  String getName();
 
-    String getDescription();
+  String getDescription();
 
-    Class<Q> getQueryClass();
+  Class<Q> getQueryClass();
 
-    Class<R> getResponseClass();
+  Class<R> getResponseClass();
 
-    Q newQuery();
+  Q newQuery(Collection collection);
 
-    R execute(Q query);
+  R execute(Collection collection, Q query);
 
-    boolean indexFile(String collectionName, File file);
+  boolean indexFile(Collection collection, File file);
 
-    boolean indexMap(String collectionName, Map<String, Object> fields);
+  boolean indexMap(Collection collection, Map<String, Object> fields);
 
-    List<SearchElement> getSupportedElements();
+  List<SearchElement> getSupportedElements();
 
-    Boolean supportsElement(SearchElement element);
+  Boolean supportsElement(SearchElement element);
 
-    Boolean supportsCondition(AbstractSearchCondition condition);
+  Boolean supportsCondition(AbstractSearchCondition condition);
 
-    void setCollection(Collection collection);
 }

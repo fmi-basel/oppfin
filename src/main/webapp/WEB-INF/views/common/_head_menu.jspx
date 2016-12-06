@@ -8,7 +8,14 @@
 
  <ul class="nav navbar-nav navbar-right">
   <li class="dropdown"><a href="#" class="dropdown-toggle"
-   data-toggle="dropdown">Options <b class="caret"> <!-- Caret -->
+   data-toggle="dropdown">
+    <sec:authorize access="isAuthenticated()">
+         ${user.getEmail() }
+   </sec:authorize>
+   <sec:authorize access="isAnonymous()">
+         Options
+   </sec:authorize>
+   <b class="caret"> <!-- Caret -->
    </b></a>
    <ul class="dropdown-menu">
     <sec:authorize access="isAnonymous()">
@@ -17,13 +24,28 @@
     <sec:authorize access="isAuthenticated()">
      <spring:url value="/logout" var="logoutUrl" />
      <li><a href="${logoutUrl }">Logout</a></li>
+     <li class="divider">
+      <!-- divider -->
+     </li>
     </sec:authorize>
-    <li><a href="about">About ${currentSearchbox.getName() }</a></li>
+
+    <spring:url var="home" value="/${searchbox.getSlug() }/" />
+    <spring:url var="admin" value="/admin/${searchbox.getSlug() }" />
+    <spring:url var="system" value="/system" />
+    <li><a href="${home }">Home</a></li>
+    <jsp:include page="/WEB-INF/views/common/_head_menu_custom_entries.jspx"/>
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+    <li><a href="${admin }">Admin</a></li>
+     </sec:authorize>
+         <sec:authorize access="hasRole('ROLE_SYSTEM')">
+    <li><a href="${system }">System</a></li>
+     </sec:authorize>
     <li class="divider">
      <!-- divider -->
     </li>
-    <c:forEach var="searchbox" items="${searchboxes}">
-     <li><a href="?searchbox=${searchbox.getSlug() }">${searchbox.getName() }</a></li>
+    <c:forEach var="otherSearchbox" items="${searchboxes}">
+     <spring:url var="othersb" value="/${otherSearchbox.getSlug() }/" />
+     <li><a href="${othersb }">${otherSearchbox.getName() }</a></li>
     </c:forEach>
    </ul></li>
  </ul>

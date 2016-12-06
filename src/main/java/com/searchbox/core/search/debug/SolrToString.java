@@ -16,89 +16,93 @@
 package com.searchbox.core.search.debug;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.searchbox.core.SearchAdapter;
 import com.searchbox.core.SearchAdapter.Time;
 import com.searchbox.core.SearchAdapterMethod;
 import com.searchbox.core.SearchComponent;
+import com.searchbox.core.SearchElement;
+import com.searchbox.core.SearchElementBean;
+import com.searchbox.core.dm.Collection;
 import com.searchbox.core.engine.AccessibleSearchEngine;
-import com.searchbox.core.search.SearchElement;
 import com.searchbox.engine.solr.SolrSearchEngine;
 
 @SearchComponent
-public class SolrToString extends SearchElement {
+public class SolrToString extends SearchElementBean {
+  
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(SolrToString.class);
 
-    private String query;
-    private QueryResponse response;
-    private SolrQuery request;
-    private SolrSearchEngine engine;
-    
-    public SolrToString() {
-        super("Solr Debug", SearchElement.Type.DEBUG);
+  private QueryResponse response;
+  private SolrQuery request;
+  private SolrSearchEngine engine;
+  private Collection collection;
+
+  public SolrToString() {
+    this.setLabel("Solr Debug");
+    this.setType(SearchElement.Type.DEBUG);
+  }
+
+  public Collection getCollection() {
+    return collection;
+  }
+
+  public void setCollection(Collection collection) {
+    this.collection = collection;
+  }
+
+  public QueryResponse getResponse() {
+    return response;
+  }
+
+  public void setResponse(QueryResponse response) {
+    this.response = response;
+  }
+
+  public SolrQuery getRequest() {
+    return request;
+  }
+
+  public void setRequest(SolrQuery request) {
+    this.request = request;
+  }
+
+  public SolrSearchEngine getEngine() {
+    return engine;
+  }
+
+  public void setEngine(SolrSearchEngine engine) {
+    this.engine = engine;
+  }
+
+  public String getExternalQueryURL() {
+    if (AccessibleSearchEngine.class.isAssignableFrom(this.engine.getClass())) {
+      return ((AccessibleSearchEngine) engine).getUrlBase(collection) + "/select?"
+          + request.toString();
+    } else {
+      return null;
+    }
+  }
+
+  @SearchAdapter
+  public static class SolrAdaptor {
+
+    @SearchAdapterMethod(execute = Time.PRE)
+    public void addDebug(SolrQuery query) {
+      query.set("debug", "true");
     }
 
-    public String getQuery() {
-        return query;
+    @SearchAdapterMethod(execute = Time.POST)
+    public void getDebugInfo(SolrToString searchElement, Collection collection,
+        SolrQuery query, QueryResponse response, SolrSearchEngine engine) {
+      LOGGER.debug("Post SolrToString for collection {}",collection);
+      searchElement.setRequest(query);
+      searchElement.setResponse(response);
+      searchElement.setEngine(engine);
+      searchElement.setCollection(collection);
     }
-
-    public void setQuery(String query) {
-        this.query = query;
-    }
-
-    public QueryResponse getResponse() {
-        return response;
-    }
-
-    public void setResponse(QueryResponse response) {
-        this.response = response;
-    }
-
-    public SolrQuery getRequest() {
-        return request;
-    }
-
-    public void setRequest(SolrQuery request) {
-        this.request = request;
-    }
-
-    public SolrSearchEngine getEngine() {
-        return engine;
-    }
-
-    public void setEngine(SolrSearchEngine engine) {
-        this.engine = engine;
-    }
-    
-    public String getExternalQueryURL(){
-        if(AccessibleSearchEngine.class.isAssignableFrom(this.engine.getClass())){
-            return ((AccessibleSearchEngine)engine).getUrlBase()
-                    +"/select?"+query.toString();
-        } else {
-            return null;
-        }
-    }
-
-
-    @SearchAdapter
-    public static class SolrAdaptor {
-
-        @SearchAdapterMethod(execute = Time.PRE)
-        public SolrQuery addDebug(SolrSearchEngine engine, 
-                SolrToString searchElement, SolrQuery query) {
-            query.set("debug", "true");
-            searchElement.setEngine(engine);
-            searchElement.setRequest(query);
-            return query;
-        }
-
-        @SearchAdapterMethod(execute = Time.POST)
-        public SolrToString getDebugInfo(SolrToString searchElement,
-                SolrQuery query, QueryResponse response) {
-            searchElement.setQuery(query.toString());
-            searchElement.setResponse(response);
-            return searchElement;
-        }
-    }
+  }
 }

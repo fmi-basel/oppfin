@@ -19,52 +19,55 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.searchbox.core.SearchAttribute;
+import com.searchbox.core.SearchElement;
+import com.searchbox.core.SearchElementBean;
 import com.searchbox.core.ref.Order;
 import com.searchbox.core.ref.Sort;
 
 public class SearchElementWithValues<K extends ValueElement> extends
-        SearchElement {
+  SearchElementBean {
 
-    @SearchAttribute
-    protected Order order;
+  @SearchAttribute
+  protected Order order;
 
-    @SearchAttribute
-    protected Sort sort;
+  @SearchAttribute
+  protected Sort sort;
 
-    protected SortedSet<K> values;
+  protected SortedSet<K> values;
 
-    public SearchElementWithValues() {
-        super(null, SearchElement.Type.UNKNOWN);
-        values = new TreeSet<K>();
-    }
+  public SearchElementWithValues() {
+    this.setType(SearchElement.Type.UNKNOWN);
+    values = new TreeSet<K>();
+  }
 
-    public SearchElementWithValues(String label, SearchElement.Type type) {
-        super(label, type);
-        values = new TreeSet<K>();
-    }
+  public SearchElementWithValues(String label, SearchElement.Type type) {
+    this.setLabel(label);
+    this.setType(type);
+    values = new TreeSet<K>();
+  }
 
-    public SearchElementWithValues<K> addValueElement(K valueElement) {
-        this.values.add(valueElement);
-        return this;
-    }
+  public SearchElementWithValues<K> addValueElement(K valueElement) {
+    this.values.add(valueElement);
+    return this;
+  }
 
-    public SortedSet<K> getValues() {
-        return this.values;
-    }
+  public SortedSet<K> getValues() {
+    return this.values;
+  }
 
-    public Order getOrder() {
-        return order;
-    }
+  public Order getOrder() {
+    return order;
+  }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+  public void setOrder(Order order) {
+    this.order = order;
+  }
 
-    public Sort getSort() {
-        return sort;
-    }
+  public Sort getSort() {
+    return sort;
+  }
 
-    public void setSort(Sort sort) {
-        this.sort = sort;
-    }
+  public void setSort(Sort sort) {
+    this.sort = sort;
+  }
 }

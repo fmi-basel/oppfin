@@ -19,104 +19,104 @@ import com.searchbox.core.SearchAttribute;
 import com.searchbox.core.SearchComponent;
 import com.searchbox.core.SearchCondition;
 import com.searchbox.core.SearchConverter;
+import com.searchbox.core.SearchElement;
 import com.searchbox.core.search.AbstractSearchCondition;
 import com.searchbox.core.search.ConditionalSearchElement;
-import com.searchbox.core.search.SearchElement;
 
 @SearchComponent
 public class BasicPagination extends
-        ConditionalSearchElement<BasicPagination.PageCondition> {
+    ConditionalSearchElement<BasicPagination.PageCondition> {
 
-    @SearchAttribute
-    private Integer hitsPerPage = 10;
+  @SearchAttribute
+  private Integer hitsPerPage = 10;
 
-    private Integer currentPage = 0;
-    private Integer maxPage;
+  private Integer currentPage = 0;
+  private Integer maxPage;
 
-    private Long numberOfHits;
+  private Long numberOfHits;
 
-    public BasicPagination() {
-        super();
-        this.type = SearchElement.Type.VIEW;
+  public BasicPagination() {
+    super();
+    this.setType(SearchElement.Type.VIEW);
+  }
+
+  public Integer getMaxPage() {
+    return maxPage;
+  }
+
+  public void setMaxPage(Integer maxPage) {
+    this.maxPage = maxPage;
+  }
+
+  public Integer getHitsPerPage() {
+    return hitsPerPage;
+  }
+
+  public void setHitsPerPage(Integer hitsPerPage) {
+    this.hitsPerPage = hitsPerPage;
+  }
+
+  public Long getNumberOfHits() {
+    return numberOfHits;
+  }
+
+  public void setNumberOfHits(long l) {
+    this.numberOfHits = l;
+  }
+
+  public Integer getCurrentPage() {
+    return currentPage;
+  }
+
+  public void setCurrentPage(Integer currentPage) {
+    this.currentPage = currentPage;
+  }
+
+  @Override
+  public void mergeSearchCondition(AbstractSearchCondition condition) {
+    if (PageCondition.class.equals(condition.getClass())) {
+      PageCondition pcondition = (PageCondition) condition;
+      this.currentPage = pcondition.getPage();
+    }
+  }
+
+  @SearchCondition(urlParam = "p")
+  public static class PageCondition extends AbstractSearchCondition {
+    Integer page;
+
+    public PageCondition(Integer page) {
+      this.page = page;
     }
 
-    public Integer getMaxPage() {
-        return maxPage;
-    }
-
-    public void setMaxPage(Integer maxPage) {
-        this.maxPage = maxPage;
-    }
-
-    public Integer getHitsPerPage() {
-        return hitsPerPage;
-    }
-
-    public void setHitsPerPage(Integer hitsPerPage) {
-        this.hitsPerPage = hitsPerPage;
-    }
-
-    public Long getNumberOfHits() {
-        return numberOfHits;
-    }
-
-    public void setNumberOfHits(long l) {
-        this.numberOfHits = l;
-    }
-
-    public Integer getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
-    }
-
-    @Override
-    public void mergeSearchCondition(AbstractSearchCondition condition) {
-        if (PageCondition.class.equals(condition.getClass())) {
-            PageCondition pcondition = (PageCondition) condition;
-            this.currentPage = pcondition.getPage();
-        }
-    }
-
-    @SearchCondition(urlParam = "p")
-    public static class PageCondition extends AbstractSearchCondition {
-        Integer page;
-
-        public PageCondition(Integer page) {
-            this.page = page;
-        }
-
-        public Integer getPage() {
-            return this.page;
-        }
-    }
-
-    @SearchConverter
-    public static class Converter
-            implements
-            org.springframework.core.convert.converter.Converter<String, BasicPagination.PageCondition> {
-
-        @Override
-        public PageCondition convert(String source) {
-            return new PageCondition(Integer.parseInt(source));
-        }
-
+    public Integer getPage() {
+      return this.page;
     }
 
     @Override
-    public String geParamValue() {
-        return this.currentPage + "";
+    public String getParamValue() {
+      return Integer.toString(page);
     }
+  }
+
+  @SearchConverter
+  public static class Converter
+      implements
+      org.springframework.core.convert.converter.Converter<String, BasicPagination.PageCondition> {
 
     @Override
-    public PageCondition getSearchCondition() {
-        return new PageCondition(this.currentPage);
+    public PageCondition convert(String source) {
+      return new PageCondition(Integer.parseInt(source));
     }
 
-    @Override
-    public Class<?> getConditionClass() {
-        return PageCondition.class;
-    }
+  }
+
+  @Override
+  public PageCondition getSearchCondition() {
+    return new PageCondition(this.currentPage);
+  }
+
+  @Override
+  public Class<?> getConditionClass() {
+    return PageCondition.class;
+  }
 }

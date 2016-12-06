@@ -1,0 +1,20 @@
+.H2020 {
+  background-color: lightblue !important;
+}
+.H2020  > span.field-label {
+  color:white!important;
+}
+
+.COST {
+    background-color: purple !important;
+}
+
+.EEN {
+  background-color: rgba(170,200,10,0.6) !important;
+}
+
+.Ideal-Ist {
+	  background-color: #FBFF8F !important;
+}
+
+

@@ -16,34 +16,41 @@
 package com.searchbox.core.search;
 
 import com.searchbox.core.SearchCondition;
+import com.searchbox.core.SearchElement;
+import com.searchbox.core.SearchElementBean;
 
 public abstract class ConditionalSearchElement<K extends AbstractSearchCondition>
-        extends SearchElement implements GenerateSearchCondition<K>,
-        SearchConditionToElementMerger {
+    extends SearchElementBean implements GenerateSearchCondition<K>,
+    SearchConditionToElementMerger {
 
-    public ConditionalSearchElement(String label, SearchElement.Type type) {
-        super(label, type);
+  public ConditionalSearchElement(String label, SearchElement.Type type) {
+    this.setLabel(label);
+    this.setType(type);
+  }
+
+  public ConditionalSearchElement() {
+    super();
+  }
+
+  @Override
+  public abstract K getSearchCondition();
+
+  @Override
+  public abstract void mergeSearchCondition(AbstractSearchCondition condition);
+
+  @Override
+  public abstract Class<?> getConditionClass();
+
+  public String getUrlParam() {
+    Class<?> clazz = this.getConditionClass();
+    if (clazz.isAnnotationPresent(SearchCondition.class)) {
+      return clazz.getAnnotation(SearchCondition.class).urlParam();
+    } else {
+      return "missingAnnotationOnSearchConditionClass";
     }
-
-    public ConditionalSearchElement() {
-        super();
-    }
-
-    @Override
-    public abstract K getSearchCondition();
-
-    @Override
-    public abstract void mergeSearchCondition(AbstractSearchCondition condition);
-
-    @Override
-    public abstract Class<?> getConditionClass();
-
-    public String getUrlParam() {
-        Class<?> clazz = this.getConditionClass();
-        if (clazz.isAnnotationPresent(SearchCondition.class)) {
-            return clazz.getAnnotation(SearchCondition.class).urlParam();
-        } else {
-            return "missingAnnotationOnSearchConditionClass";
-        }
-    }
+  }
+  
+  public String getParamValue(){
+    return this.getSearchCondition().getParamValue();
+  }
 }

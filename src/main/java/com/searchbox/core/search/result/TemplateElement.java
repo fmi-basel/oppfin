@@ -16,6 +16,7 @@
 package com.searchbox.core.search.result;
 
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.slf4j.Logger;
@@ -23,16 +24,20 @@ import org.slf4j.LoggerFactory;
 
 import com.searchbox.core.SearchAttribute;
 import com.searchbox.core.SearchComponent;
-import com.searchbox.core.search.SearchElement;
+import com.searchbox.core.SearchElement;
+import com.searchbox.core.SearchElementBean;
 import com.searchbox.core.search.UseCollector;
 
 @SearchComponent
-public class TemplateElement extends SearchElement implements UseCollector {
+public class TemplateElement extends SearchElementBean implements UseCollector {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(TemplateElement.class);
-  
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(TemplateElement.class);
+
   private static final String COLLECTOR_KEY = "hits";
   private static final String DEFAUTL_TEMPLATE = "/WEB-INF/templates/_defaultHitView.jspx";
+  
+  private SortedSet<Hit> hits;
 
   @SearchAttribute
   protected Set<String> fields;
@@ -50,11 +55,18 @@ public class TemplateElement extends SearchElement implements UseCollector {
   String idField;
 
   public TemplateElement() {
-    super("Result Set with Template", SearchElement.Type.VIEW);
-    this.fields = new TreeSet<String>();
+    this("Template Element");
+    this.hits = new TreeSet<>();
   }
-  
-  public boolean hasTempalte(){
+
+  public TemplateElement(String name) {
+    this.setLabel(name);
+    this.setType(SearchElement.Type.VIEW);
+    this.fields = new TreeSet<>();
+    this.hits = new TreeSet<>();
+  }
+
+  public boolean hasTempalte() {
     return this.templateFile != null && !this.templateFile.isEmpty();
   }
 
@@ -71,13 +83,21 @@ public class TemplateElement extends SearchElement implements UseCollector {
     }
     return fields;
   }
-  
+
+  public SortedSet<Hit> getHits() {
+    return hits;
+  }
+
+  public void setHits(SortedSet<Hit> hits) {
+    this.hits = hits;
+  }
+
   public void setTemplateFile(String templateFile) {
     this.templateFile = templateFile;
   }
 
   public String getTemplateFile() {
-    if(hasTempalte()){
+    if (hasTempalte()) {
       return this.templateFile;
     } else {
       return TemplateElement.DEFAUTL_TEMPLATE;
@@ -118,6 +138,10 @@ public class TemplateElement extends SearchElement implements UseCollector {
 
   @Override
   public String getCollectorKey() {
-    return TemplateElement.COLLECTOR_KEY;
+    if (this.getLabel() != null && !this.getLabel().isEmpty()) {
+      return this.getLabel();
+    } else {
+      return TemplateElement.COLLECTOR_KEY;
+    }
   }
 }

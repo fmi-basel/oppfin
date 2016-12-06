@@ -62,6 +62,36 @@ body #main-content {
  }
 }
 
+/** Pagination **/
+@media ( min-width : 768px) {
+}
+
+@media ( max-width : 768px) {
+ .result-list .label-tag {
+  display: list-item;
+  margin-bottom: 5px;
+ }
+}
+
+/** Pagination **/
+@media ( min-width : 768px) {
+ #basic-pagination a,#basic-pagination span {
+  padding: 5px 11px;
+ }
+ #basic-pagination .gap {
+  display: inline-block;
+ }
+}
+
+@media ( max-width : 768px) {
+ #basic-pagination a,#basic-pagination span {
+  padding: 5px 5px;
+ }
+ #basic-pagination .gap {
+  display: none;
+ }
+}
+
 /*************************************************************/
 /* Preset bar - dark background, horizontal menu with icon */
 /*************************************************************/
@@ -83,6 +113,7 @@ body #main-content {
  margin-right: -15px;
  margin-left: -15px;
  padding: 0 15px 0 15px;
+ font-weight: 200;
 }
 
 #navbar-top {
@@ -126,6 +157,7 @@ body #main-content {
 
 #preset-bar a {
  letter-spacing: 0.1em;
+ font-weight: 200;
 }
 
 #preset-bar li.active>a:after,#preset-bar>a:hover:after {
@@ -164,8 +196,6 @@ input:focus,textarea:focus {
  padding-right: 0px;
  padding-bottom: 40px;
  border-bottom: 1px solid #BCBCBC;
- /*background: url("/img/texture-white.png") repeat scroll 0 0
-		rgba(0, 0, 0, 0);*/
  background-color: #f5f5f5;
 }
 
@@ -177,7 +207,7 @@ input:focus,textarea:focus {
 
 #search-bar #logo-image {
  max-height: 65px;
- max-width: 260px;
+ max-width: 250px;
 }
 
 #search-bar #logo-wrapper {
@@ -247,6 +277,7 @@ a.clear_input:hover {
  color: #999;;
  font-size: 12px;
  font-weight: normal;
+ font-weight: 200;
 }
 
 #search-status-bar h4 {
@@ -286,6 +317,8 @@ a.clear_input:hover {
 
 #main-col-left h3.panel-title {
  text-transform: uppercase;
+ font-weight: 400;
+font-size: 13px;
 }
 
 #main-col-left input[type=checkbox].css-checkbox {
@@ -309,7 +342,7 @@ a.clear_input:hover {
  font-size: 12px;
  vertical-align: middle;
  cursor: pointer;
- font-weight: normal;
+ font-weight: 300;
  white-space: nowrap;
  overflow: hidden;
  text-overflow: ellipsis;
@@ -338,6 +371,11 @@ a.clear_input:hover {
 
 #main-col-left .list-group .list-group-item:last-child {
  border-bottom: none;
+}
+
+#main-col-left .list-group .list-group-item a {
+font-weight: 300;
+font-size: 90%;
 }
 
 #main-col-left .list-group .list-group-item:first-child {
@@ -370,8 +408,9 @@ a.clear_input:hover {
  text-overflow: ellipsis;
  overflow: hidden;
  white-space: nowrap;
- margin-bottom: 5px;
+ margin: 0px;
  font-size: 16px;
+ height: 20px;
 }
 
 .result-list {
@@ -381,6 +420,7 @@ a.clear_input:hover {
 
 .result-list .result {
  margin-bottom: 30px;
+ font-weight: 300;
 }
 
 .result-list .label {
@@ -391,32 +431,33 @@ a.clear_input:hover {
 }
 
 /** tag attributes **/
-.result-list .label-tag {
+.result .label-tag {
  background-color: rgba(42, 100, 150, 0.1);
  font-weight: normal;
 }
 
-.result-list .label-tag.clickable {
+.result .label-tag.clickable {
  cursor: pointer;
  border: 1px solid lightblue;
 }
 
-.result-list .label-tag.selected {
+.result .label-tag.selected {
  border: 1px solid blue;
  background-color: rgba(42, 100, 150, 0.25);
 }
 
-.result-list .label-tag.clickable:hover {
+.result .label-tag.clickable:hover {
  border: 1px solid blue;
  background-color: rgba(42, 100, 150, 0.25);
 }
 
-.result-list .label-tag .field-label {
+.result .label-tag .field-label {
  color: #999;
 }
 
-.result-list .label-tag .field-value {
+.result .label-tag .field-value {
  color: black;
+ font-weight: 200;
 }
 /*************************************************************/
 /*                    BasicPagination                        */
@@ -490,24 +531,6 @@ a.clear_input:hover {
  z-index: 2;
 }
 
-@media ( min-width : 768px) {
- #basic-pagination a,#basic-pagination span {
-  padding: 5px 11px;
- }
- #basic-pagination .gap {
-  display: inline-block;
- }
-}
-
-@media ( max-width : 768px) {
- #basic-pagination a,#basic-pagination span {
-  padding: 5px 5px;
- }
- #basic-pagination .gap {
-  display: none;
- }
-}
-
 /*************************************************************/
 /*                           Footer                          */
 /*************************************************************/
@@ -548,7 +571,7 @@ div.resultrow {
 }
 
 em {
- font-weight: bolder;
+ font-weight: 800;
  font-style: normal;
 }
 
@@ -571,8 +594,34 @@ em {
 /*************************************************************/
 /*                       View page                           */
 /*************************************************************/
-.col-left .field.attributes {
- margin-bottom: 15px;
- float: left;
- width: 100%;
+.viewpage h2{
+  margin-top:0;
 }
+
+.col-left .label-tag{
+  font-weight:normal;
+  text-align:left;
+  padding:0;
+  font-size:100%;
+  margin-bottom: 15px;
+  float: left;
+  width: 100%;
+  white-space:normal;
+}
+
+.col-left .label-tag > .field-label {
+  float: left;
+  font-weight: bold;
+  clear: both;
+  width: 100%;
+  color: #333;
+}
+
+.col-left .label-tag > .field-value {
+  float: left;
+  clear: both;
+  width: 100%;
+  line-height: 1.4em;
+  font-size: 13px;
+  color: #666;
+} 
