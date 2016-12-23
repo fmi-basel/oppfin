@@ -89,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       // Configures url based authorization
       .authorizeRequests()
           // Anyone can access the urls
-          .antMatchers("/","/*","/**","/auth/**", "/login/**", "/signin/**",
+          .antMatchers("/","/*","/oppfin/**","/auth/**", "/login/**", "/signin/**",
               "/signup/**", "/user/register/**",
               "/user/reset/**",
               "/user/resetPassword/**").permitAll()

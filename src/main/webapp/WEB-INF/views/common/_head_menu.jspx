@@ -11,16 +11,17 @@
    data-toggle="dropdown">
     <sec:authorize access="isAuthenticated()">
          ${user.getEmail() }
+         <b class="caret"> <!-- Caret --></b>
    </sec:authorize>
-   <sec:authorize access="isAnonymous()">
-         Options
-   </sec:authorize>
-   <b class="caret"> <!-- Caret -->
-   </b></a>
-   <ul class="dropdown-menu">
+         
     <sec:authorize access="isAnonymous()">
-     <li><a href="about">Login</a></li>
+        
+     <li><a href="/index">Login</a></li>
+     
     </sec:authorize>
+   </a>
+      
+   <ul class="dropdown-menu">
     <sec:authorize access="isAuthenticated()">
      <spring:url value="/logout" var="logoutUrl" />
      <li><a href="${logoutUrl }">Logout</a></li>

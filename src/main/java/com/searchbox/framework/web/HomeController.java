@@ -55,6 +55,7 @@ import com.searchbox.framework.model.UserEntity;
 import com.searchbox.framework.repository.CollectionRepository;
 import com.searchbox.framework.repository.SearchEngineRepository;
 import com.searchbox.framework.repository.SearchboxRepository;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/")
@@ -127,8 +128,7 @@ public class HomeController {
   public ModelAndView home(@AuthenticationPrincipal UserEntity user,
       HttpServletRequest request, ModelAndView model,
       RedirectAttributes redirectAttributes) {
-
-    ModelAndView mav = new ModelAndView("index");
+    ModelAndView mav = new ModelAndView(new RedirectView("/oppfin", true));
     return mav;
   }
   
@@ -138,5 +138,13 @@ public class HomeController {
     model.setViewName("util/autologin");
     model.addObject("openid_identifier", url);
     return model;
+  }
+  
+  @RequestMapping("/index")
+  public ModelAndView login(@AuthenticationPrincipal UserEntity user,
+      HttpServletRequest request, ModelAndView model,
+      RedirectAttributes redirectAttributes){
+    ModelAndView mav = new ModelAndView("index");
+    return mav;
   }
 }
