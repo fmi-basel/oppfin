@@ -84,8 +84,11 @@
    multiValued="true" />
   <field name="suggest" type="text_general" indexed="true" stored="true"
    multiValued="true" />
-
-
+   
+  <field name="published" type="tdate" indexed="true" stored="true" />
+  <field name="updated" type="tdate" indexed="true" stored="true" />
+  <field name="deadline" type="tdate" indexed="true" stored="true" /> 
+  
   <!-- Dynamic field definitions allow using convention over configuration 
    for fields via the specification of patterns to match field names. EXAMPLE: 
    name="*_i" will match any field ending in _i (like myid_i, z_i) RESTRICTION: 
@@ -97,9 +100,9 @@
   <dynamicField name="*_is" type="int" indexed="true"
    stored="true" multiValued="true" />
   <dynamicField name="*_s" type="string" indexed="true"
-   stored="true" />
+   stored="true" termVectors="true"/>
   <dynamicField name="*_ss" type="string" indexed="true"
-   stored="true" multiValued="true" />
+   stored="true" multiValued="true" termVectors="true"/>
   <dynamicField name="*_l" type="long" indexed="true"
    stored="true" />
   <dynamicField name="*_ls" type="long" indexed="true"
@@ -107,9 +110,9 @@
   <dynamicField name="*_t" type="text_general" indexed="true"
    stored="true" />
   <dynamicField name="*_txt" type="text_general" indexed="true"
-   stored="true" multiValued="true" />
+   stored="true" multiValued="true" termVectors="true"/>
   <dynamicField name="*_en" type="text_en" indexed="true"
-   stored="true" multiValued="true" />
+   stored="true" multiValued="true" termVectors="true"/>
   <dynamicField name="*_b" type="boolean" indexed="true"
    stored="true" />
   <dynamicField name="*_bs" type="boolean" indexed="true"
