@@ -64,8 +64,8 @@
   <slf4j.version>1.7.5</slf4j.version>
   <spring.version>4.0.2.RELEASE</spring.version>
   <spring-batch.version>2.2.5.RELEASE</spring-batch.version>
-  <spring-security.version>3.2.0.RELEASE</spring-security.version>
-  <spring-social.version>1.1.0.BUILD-SNAPSHOT</spring-social.version>
+  <spring-security.version>3.2.1.RELEASE</spring-security.version>
+  <spring-social.version>1.1.0.RC1</spring-social.version>
   <spring-data.version></spring-data.version>
   <jetty.version>8.1.5.v20120716</jetty.version>
   <lucene.version>4.7.0</lucene.version>
@@ -120,19 +120,21 @@
    <artifactId>h2</artifactId>
    <version>1.3.172</version>
   </dependency>
-    <!-- MySQL JDBC connector -->
-  <!-- If you want to use MySQL, uncomment this dependency declation. -->
-  <!-- <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> 
-   <version>${mysql.connector.version}</version> </dependency> -->
+  <!-- MySQL JDBC connector -->
+  <dependency>
+   <groupId>mysql</groupId>
+   <artifactId>mysql-connector-java</artifactId>
+   <version>5.1.29</version>
+  </dependency>
   <!-- PostgreSQL JDBC 4 -->
   <!-- If you don't want to use PostgreSQL, uncomment this dependency declaration. -->
   <!-- <dependency> <groupId>postgresql</groupId> <artifactId>postgresql</artifactId> 
    <version>9.0-801.jdbc4</version> </dependency> -->
   <!-- BoneCP -->
   <dependency>
-   <groupId>com.jolbox</groupId>
-   <artifactId>bonecp</artifactId>
-   <version>0.8.0.RELEASE</version>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-dbcp2</artifactId>
+   <version>2.0</version>
   </dependency>
   <!-- ************************************************* -->
   <!-- -->
@@ -149,10 +151,6 @@
    <artifactId>hibernate-entitymanager</artifactId>
    <version>${hibernate.version}</version>
    <exclusions>
-    <exclusion>
-     <groupId>cglib</groupId>
-     <artifactId>cglib</artifactId>
-    </exclusion>
     <exclusion>
      <groupId>dom4j</groupId>
      <artifactId>dom4j</artifactId>
@@ -283,6 +281,11 @@
   </dependency>
   <dependency>
    <groupId>org.springframework</groupId>
+   <artifactId>spring-context-support</artifactId>
+   <version>${spring.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.springframework</groupId>
    <artifactId>spring-core</artifactId>
    <version>${spring.version}</version>
    <exclusions>
@@ -345,6 +348,18 @@
   </dependency>
   <dependency>
    <groupId>org.springframework.security</groupId>
+   <artifactId>spring-security-openid</artifactId>
+   <version>${spring-security.version}</version>
+   <scope>compile</scope>
+  </dependency>
+  <dependency>
+   <groupId>org.openid4java</groupId>
+   <artifactId>openid4java-consumer</artifactId>
+   <version>0.9.6</version>
+   <type>pom</type>
+  </dependency>
+  <dependency>
+   <groupId>org.springframework.security</groupId>
    <artifactId>spring-security-taglibs</artifactId>
    <version>${spring-security.version}</version>
   </dependency>
@@ -403,15 +418,21 @@
    <version>${solr.version}</version>
   </dependency>
   <dependency>
-    <groupId>org.elasticsearch</groupId>
-    <artifactId>elasticsearch</artifactId>
-    <version>${es.version}</version>
-</dependency>
+   <groupId>org.elasticsearch</groupId>
+   <artifactId>elasticsearch</artifactId>
+   <version>${es.version}</version>
+  </dependency>
   <!-- ************************************************* -->
   <!-- -->
   <!-- J2EE dependencies -->
   <!-- -->
   <!-- ************************************************* -->
+  <dependency>
+   <groupId>javax.mail</groupId>
+   <artifactId>mail</artifactId>
+   <version>1.4.7</version>
+  </dependency>
+
   <!-- Servlet API 3.0 -->
   <dependency>
    <groupId>org.glassfish</groupId>
@@ -444,6 +465,42 @@
    <artifactId>string</artifactId>
    <version>1.1.0</version>
    <scope>compile</scope>
+  </dependency>
+  <!-- ************************************************* -->
+  <!-- -->
+  <!-- Collection dependencies -->
+  <!-- -->
+  <!-- ************************************************* -->
+  <dependency>
+   <groupId>com.googlecode.json-simple</groupId>
+   <artifactId>json-simple</artifactId>
+   <version>1.1</version>
+  </dependency>
+  <dependency>
+   <!-- jsoup HTML parser library @ http://jsoup.org/ -->
+   <groupId>org.jsoup</groupId>
+   <artifactId>jsoup</artifactId>
+   <version>1.7.3</version>
+  </dependency>
+  <dependency>
+   <groupId>org.apache.axis</groupId>
+   <artifactId>axis</artifactId>
+   <version>1.4</version>
+  </dependency>
+  <dependency>
+   <groupId>commons-discovery</groupId>
+   <artifactId>commons-discovery</artifactId>
+   <version>0.5</version>
+  </dependency>
+  <dependency>
+   <groupId>wsdl4j</groupId>
+   <artifactId>wsdl4j</artifactId>
+   <version>1.6.3</version>
+  </dependency>
+  <dependency>
+   <groupId>javax.xml</groupId>
+   <artifactId>jaxrpc-api</artifactId>
+   <version>1.1</version>
   </dependency>
  </dependencies>
  <build>
