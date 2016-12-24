@@ -80,7 +80,7 @@
 
           </div>
 
-          <sec:authorize access="isAnonymous()">
+                      <sec:authorize access="isAnonymous()">
             <div class="row col-md-7">
               <div class="col-md-12">
                 <div class="panel panel-default">
@@ -93,7 +93,8 @@
           </sec:authorize>
           <sec:authorize access="isAuthenticated()">
             <jsp:forward page="/oppfin" />
-          </sec:authorize>
+          </sec:authorize> 
+          
 
         </div>
 
