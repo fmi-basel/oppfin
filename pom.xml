@@ -363,6 +363,7 @@
    <artifactId>spring-security-taglibs</artifactId>
    <version>${spring-security.version}</version>
   </dependency>
+  
   <!-- Spring Social -->
   <dependency>
    <groupId>org.springframework.social</groupId>
@@ -396,6 +397,13 @@
    <artifactId>spring-social-twitter</artifactId>
    <version>${spring-social.version}</version>
   </dependency>
+    <!-- auth0 dependencies -->
+
+    <dependency>
+        <groupId>com.auth0</groupId>
+        <artifactId>auth0-spring-mvc</artifactId>
+        <version>1.1.2</version>
+    </dependency>
 
   <!-- ************************************************* -->
   <!-- -->
