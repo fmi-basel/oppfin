@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2017 anhlucky.
  *
@@ -61,7 +62,7 @@ public class Auth0LoginController {
 
     @RequestMapping(value = "/user/auth0Login", method = RequestMethod.GET)
     protected String login(final Map<String, Object> model, final HttpServletRequest req) {
-        logger.info("===========Performing login");
+        logger.info("Performing login");
         detectError(model);
         // add a Nonce value to session storage
         NonceUtils.addNonceToStorage(req);
@@ -82,7 +83,7 @@ public class Auth0LoginController {
 
     @RequestMapping("/error")
     protected String error(final RedirectAttributes redirectAttributes) throws IOException {
-        logger.error("==============Handling error");
+        logger.error("Handling error");
         final String logoutPath = appConfig.getOnLogoutRedirectTo();
         redirectAttributes.addFlashAttribute("error", true);
         return "redirect:" + logoutPath;
@@ -90,13 +91,11 @@ public class Auth0LoginController {
 
     @RequestMapping(value = "/portal/home")
     protected ModelAndView home(final Map<String, Object> model, final HttpServletRequest req, final Principal principal) {
-        logger.info("===============Home page");
+        logger.info("Home page");
         try {
-//        final String name = principal.getName();
-//        logger.info("==================Principal name: " + name);
             final Auth0User auth0User = SessionUtils.getAuth0User(req);
             model.put("user", auth0User);
-            logger.info("==================USER: " + auth0User.getName());
+            logger.info("USER: " + auth0User.getName());
             String email = auth0User.getEmail();
             UserEntity user = repository.findByEmail(auth0User.getEmail());
             logger.info("Found user: {}", user);
@@ -116,7 +115,7 @@ public class Auth0LoginController {
             SecurityUtil.logInUser(user);
             logger.info("User {} has been signed in", user.getEmail());
         } catch (Exception e) {
-            logger.error("=======>>>ERROR:" + e);
+            logger.error("ERROR:" + e);
         }
         ModelAndView mav = new ModelAndView(new RedirectView("/oppfin", true));
         return mav;

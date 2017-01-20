@@ -18,7 +18,7 @@
       })(window, document, 'script', '//www.google-analytics.com/analytics.js',
           'ga');
 
-      ga('create', 'UA-30116319-3', 'opportunity-finder.com');
+      ga('create', 'UA-30116319-1', 'opportunity-finder.com');
       ga('send', 'pageview');
     </script>
 
