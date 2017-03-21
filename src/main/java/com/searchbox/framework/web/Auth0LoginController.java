@@ -70,7 +70,14 @@ public class Auth0LoginController {
         model.put("clientDomain", appConfig.getDomain());
         model.put("loginCallback", appConfig.getLoginCallback());
         model.put("state", SessionUtils.getState(req));
-        return "/user/auth0Login";
+        String url = String.format("%s://%s:%d/",req.getScheme(),  req.getServerName(), req.getServerPort());
+        String redirectUrl = appConfig.getIssuer()+"authorize?"
+                + "response_type=code&scope=openid%20profile&"
+                + "client_id="+appConfig.getClientId()+"&"
+                + "state="+SessionUtils.getState(req)
+                + "&redirect_uri="+url+"callback";
+        return "redirect:" + redirectUrl;
+        //return "/user/auth0Login";
     }
 
     private void detectError(final Map<String, Object> model) {
