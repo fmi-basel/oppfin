@@ -60,7 +60,34 @@ public class Auth0LoginController {
         this.appConfig = appConfig;
     }
 
-    @RequestMapping(value = "/user/auth0Login", method = RequestMethod.GET)
+//    @RequestMapping(value = "/user/auth0Login", method = RequestMethod.GET)
+//    protected String login(final Map<String, Object> model, final HttpServletRequest req) {
+//        logger.info("Performing login");
+//        detectError(model);
+//        // add a Nonce value to session storage
+//        NonceUtils.addNonceToStorage(req);
+//        model.put("clientId", appConfig.getClientId());
+//        model.put("clientDomain", appConfig.getDomain());
+//        model.put("loginCallback", appConfig.getLoginCallback());
+//        model.put("state", SessionUtils.getState(req));
+//
+//        int port = req.getServerPort();
+//        String url;
+//        if (port == 80) {
+//            url = String.format("%s://%s/", req.getScheme(), req.getServerName());
+//        } else {
+//            url = String.format("%s://%s:%d/", req.getScheme(), req.getServerName(), req.getServerPort());
+//        }
+//        String redirectUrl = appConfig.getIssuer() + "authorize?"
+//                + "response_type=code&scope=openid%20profile&"
+//                + "client_id=" + appConfig.getClientId() + "&"
+//                + "state=" + SessionUtils.getState(req)
+//                + "&redirect_uri=" + url + "callback";
+//        return "redirect:" + redirectUrl;
+//        //return "/user/auth0Login";
+//    }
+
+    @RequestMapping("/index")
     protected String login(final Map<String, Object> model, final HttpServletRequest req) {
         logger.info("Performing login");
         detectError(model);
@@ -70,14 +97,20 @@ public class Auth0LoginController {
         model.put("clientDomain", appConfig.getDomain());
         model.put("loginCallback", appConfig.getLoginCallback());
         model.put("state", SessionUtils.getState(req));
-        String url = String.format("%s://%s:%d/",req.getScheme(),  req.getServerName(), req.getServerPort());
-        String redirectUrl = appConfig.getIssuer()+"authorize?"
+
+        int port = req.getServerPort();
+        String url;
+        if (port == 80) {
+            url = String.format("%s://%s/", req.getScheme(), req.getServerName());
+        } else {
+            url = String.format("%s://%s:%d/", req.getScheme(), req.getServerName(), req.getServerPort());
+        }
+        String redirectUrl = appConfig.getIssuer() + "authorize?"
                 + "response_type=code&scope=openid%20profile&"
-                + "client_id="+appConfig.getClientId()+"&"
-                + "state="+SessionUtils.getState(req)
-                + "&redirect_uri="+url+"callback";
+                + "client_id=" + appConfig.getClientId() + "&"
+                + "state=" + SessionUtils.getState(req)
+                + "&redirect_uri=" + url + "callback";
         return "redirect:" + redirectUrl;
-        //return "/user/auth0Login";
     }
 
     private void detectError(final Map<String, Object> model) {

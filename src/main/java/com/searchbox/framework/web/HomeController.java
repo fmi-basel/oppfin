@@ -140,11 +140,11 @@ public class HomeController {
     return model;
   }
   
-  @RequestMapping("/index")
-  public ModelAndView login(@AuthenticationPrincipal UserEntity user,
-      HttpServletRequest request, ModelAndView model,
-      RedirectAttributes redirectAttributes){
-    ModelAndView mav = new ModelAndView("index");
-    return mav;
-  }
+//  @RequestMapping("/index")
+//  public ModelAndView login(@AuthenticationPrincipal UserEntity user,
+//      HttpServletRequest request, ModelAndView model,
+//      RedirectAttributes redirectAttributes){
+//    ModelAndView mav = new ModelAndView("index");
+//    return mav;
+//  }
 }
