@@ -34,20 +34,12 @@
     <spring:url var="admin" value="/admin/${searchbox.getSlug() }" />
     <spring:url var="system" value="/system" />
     <li><a href="${home }">Home</a></li>
-    <jsp:include page="/WEB-INF/views/common/_head_menu_custom_entries.jspx"/>
     <sec:authorize access="hasRole('ROLE_ADMIN')">
     <li><a href="${admin }">Admin</a></li>
      </sec:authorize>
          <sec:authorize access="hasRole('ROLE_SYSTEM')">
     <li><a href="${system }">System</a></li>
      </sec:authorize>
-    <li class="divider">
-     <!-- divider -->
-    </li>
-    <c:forEach var="otherSearchbox" items="${searchboxes}">
-     <spring:url var="othersb" value="/${otherSearchbox.getSlug() }/" />
-     <li><a href="${othersb }">${otherSearchbox.getName() }</a></li>
-    </c:forEach>
    </ul></li>
  </ul>
 
