@@ -98,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           // The admin part is protected
           .antMatchers("/admin/**").hasAnyRole("SYSTEM", "ADMIN")
           // The rest of the our application is protected.
-          .antMatchers("/**").hasAnyRole("SYSTEM", "ADMIN", "USER")
+          .antMatchers("/**", "/favorite/**").hasAnyRole("SYSTEM", "ADMIN", "USER")
           .and()
           
       // Adds the SocialAuthenticationFilter to Spring Security's
