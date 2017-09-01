@@ -10,19 +10,19 @@
   
 
   <spring:url
-    value="http://netdna.bootstrapcdn.com/bootstrap/${bootstrapVersion }/css/bootstrap.min.css"
+    value="https://netdna.bootstrapcdn.com/bootstrap/${bootstrapVersion }/css/bootstrap.min.css"
     var="bootstrap_css_url" />
 
   <spring:url
-    value="http://netdna.bootstrapcdn.com/bootstrap/${bootstrapVersion }/css/bootstrap-theme.min.css"
+    value="https://netdna.bootstrapcdn.com/bootstrap/${bootstrapVersion }/css/bootstrap-theme.min.css"
     var="bootstrap_theme_css_url" />
 
   <spring:url
-    value="http://ajax.googleapis.com/ajax/libs/jquery/${jqueryVersion }/jquery.min.js"
+    value="https://ajax.googleapis.com/ajax/libs/jquery/${jqueryVersion }/jquery.min.js"
     var="jquery_url" />
 
   <spring:url
-    value="http://netdna.bootstrapcdn.com/bootstrap/${bootstrapVersion }/js/bootstrap.js"
+    value="https://netdna.bootstrapcdn.com/bootstrap/${bootstrapVersion }/js/bootstrap.js"
     var="bootstrap_js_url" />
 
   <link rel="stylesheet" type="text/css" href="${bootstrap_css_url}" />
