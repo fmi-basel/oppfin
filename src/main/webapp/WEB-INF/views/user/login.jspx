@@ -12,13 +12,33 @@
  <jsp:directive.page pageEncoding="UTF-8" />
 
 
+
  <sec:authorize access="isAnonymous()">
   <div class="omb_login">
+      
+     <c:url value="/user/auth0Login" var="auth0LoginUrl" />
+     
+<!--      <h3 class="omb_authTitle">
+<a href="${auth0LoginUrl }"><spring:message
+      code="label.navigation.registration.auth0" /></a>
+</h3>-->
    <c:url value="/user/register" var="registerUrl" />
    <h3 class="omb_authTitle">
     Login or <a href="${registerUrl }"><spring:message
       code="label.navigation.registration.link" /></a>
    </h3>
+   <div class="row omb_row-sm-offset-3 omb_loginOr" >
+       <span class="auth0">
+        <a  href="${auth0LoginUrl}"> <spring:url
+            value="/assets/images/auth0.jpeg"
+            var="auth0_logo" /> <img src="${auth0_logo}" width="150px"/>
+        </a>
+       </span>
+   </div>
+   <div class="row omb_row-sm-offset-3 omb_loginOr" >
+    <!--  <hr class="omb_hrOr"/> -->
+    <span class="omb_spanOr">or</span>
+   </div>
   </div>
 
   <div class="row omb_row-sm-offset-3">

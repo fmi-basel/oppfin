@@ -1,0 +1,63 @@
+<jsp:root version="2.0" xmlns:jsp="http://java.sun.com/JSP/Page"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+ xmlns:spring="http://www.springframework.org/tags">
+
+
+
+  <jsp:directive.page contentType="text/html;charset=UTF-8" />
+  <jsp:directive.page pageEncoding="UTF-8" />
+
+
+<html>
+<head>
+
+ 
+ <spring:url value="/assets/js/jquery.growl.js" var="growl_js_url" />
+ <spring:url value="/assets/css/bootstrap.css" var="searchbox_css_url" />
+ <spring:url value="/assets/css/jquery.growl.css" var="growl_url" />
+ <spring:url value="http://code.jquery.com/jquery.js" var="jquery_url" />
+ <spring:url value="https://cdn.auth0.com/js/lock/10.0/lock.min.js" var="lock_url" />
+
+    <title>Login</title>
+    <script src="${jquery_url }" type="text/javascript" ><!-- required for FF3 and Opera --></script>
+    <script src="${lock_url }" type="text/javascript" ><!-- required for FF3 and Opera --></script>
+    
+    <link rel="stylesheet" type="text/css" href="${searchbox_css_url }"/>
+    <link rel="stylesheet" type="text/css" href="${growl_url }"/>
+    <script src="${growl_js_url }" type="text/javascript" ><!-- required for FF3 and Opera --></script>
+
+</head>
+<body>
+<div class="container">
+    <script type="text/javascript">
+        $(function () {
+            var error = ${error};
+            if (error) {
+                $.growl.error({message: "Please log in"});
+            } else {
+                $.growl({title: "Welcome!", message: "Please log in"});
+            }
+        });
+        $(function () {
+            var lock = new Auth0Lock('${clientId}', '${clientDomain}', {
+                auth: {
+                    redirectUrl: '${fn:replace(pageContext.request.requestURL, pageContext.request.requestURI, '')}${loginCallback}',
+                    responseType: 'code',
+                    params: {
+                        state: '${state}',
+                        // Learn about scopes: https://auth0.com/docs/scopes
+                        scope: 'openid user_id name nickname email picture'
+                    }
+                }
+            });
+            // delay to allow welcome message..
+            setTimeout(function () {
+                lock.show();
+            }, 1500);
+        });
+    </script>
+</div>
+</body>
+</html>
+</jsp:root>

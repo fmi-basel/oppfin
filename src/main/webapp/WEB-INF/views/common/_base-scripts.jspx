@@ -8,7 +8,7 @@
  <c:set var="jqueryUIVersion" value="1.10.4" />
 
  <spring:url
-  value="http://ajax.googleapis.com/ajax/libs/jqueryui/${jqueryUIVersion }/jquery-ui.min.js"
+  value="https://ajax.googleapis.com/ajax/libs/jqueryui/${jqueryUIVersion }/jquery-ui.min.js"
   var="jqueryui_js_url" />
 
 

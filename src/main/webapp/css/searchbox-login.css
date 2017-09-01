@@ -73,7 +73,15 @@ body > div.omb_login div div.row .col-sm-6{
   width: 3em;
   text-align: center;
 }
-
+.auth0 {
+  display: block;
+  position: absolute;
+  left: 38%;
+  bottom: -0.1em;
+  background-color: white;
+  width: 3em;
+  text-align: center;
+}
 .omb_login .omb_loginForm .input-group.i {
   width: 2em;
 }

@@ -90,15 +90,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .authorizeRequests()
           // Anyone can access the urls
           .antMatchers("/","/*","/oppfin/**","/auth/**", "/login/**", "/signin/**",
-              "/signup/**", "/user/register/**",
-              "/user/reset/**",
+              "/signup/**", "/user/register/**", "/user/auth0Login/**",
+              "/user/reset/**", "/portal/**", "/callback",
               "/user/resetPassword/**").permitAll()
           // The system part is protected
           .antMatchers("/system/**").hasAnyRole("SYSTEM")
           // The admin part is protected
           .antMatchers("/admin/**").hasAnyRole("SYSTEM", "ADMIN")
           // The rest of the our application is protected.
-          .antMatchers("/**").hasAnyRole("SYSTEM", "ADMIN", "USER")
+          .antMatchers("/**", "/favorite/**").hasAnyRole("SYSTEM", "ADMIN", "USER")
           .and()
           
       // Adds the SocialAuthenticationFilter to Spring Security's

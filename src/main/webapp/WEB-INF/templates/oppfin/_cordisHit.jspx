@@ -1,23 +1,55 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
- xmlns:sbx="urn:jsptagdir:/WEB-INF/tags/sbx"
- xmlns:c="http://java.sun.com/jsp/jstl/core" version="2.0">
+          xmlns:sbx="urn:jsptagdir:/WEB-INF/tags/sbx"
+          xmlns:spring="http://www.springframework.org/tags"
+          xmlns:sec="http://www.springframework.org/security/tags"
+          xmlns:c="http://java.sun.com/jsp/jstl/core" version="2.0">
 
- <div class="result">
-  <h4 class="result-title">
-   <sbx:title hit="${hit}" />
-  </h4>
-  <p><sbx:snippet hit="${hit}" field="cordisSnippet"/></p>
-  
-      
-   <sbx:tagAttribute limit="1" label="Program"
-    values="${hit.fieldValues['cordisProgram']}" filter="callIdentifier"
-     cssClass="${hit.fieldValues['cordisProgram']}"
-     />
-   
-    
-   <sbx:tagAttribute limit="1" label="Year"
-    filter="cordisStartYear" values="${hit.fieldValues['cordisStartYear']}" />
-   
- </div>
- 
+    <div class="result">
+        <h4 class="result-title">
+            <c:set var="marked" value="false"/>
+            <c:forEach var="item" items="${favorites}">
+                <c:if test="${item eq hit.getId()}">
+                    <c:set var="marked" value="true"/>  
+                </c:if>
+            </c:forEach>
+
+            <c:choose>
+                <c:when test="${marked}">
+                    <a href="/${searchbox.getSlug() }/${preset.getSlug() }/${process}/un_mark_favorite?id=${hit.getId()}" style="vertical-align: bottom" title="Click to unmark favourite">
+                        <spring:url value="/assets/images/star_on.png" var="images" />
+                        <img src='${images}' alt="star" height="16" align="left"/>
+                    </a>
+                </c:when>    
+                <c:otherwise>
+                    <sec:authorize access="isAnonymous()">
+                        <a href="#" style="vertical-align: bottom" title="Log-in to store this opportunity in your favorites">
+                            <spring:url value="/assets/images/star_off.png" var="images" />
+                            <img src='${images}' alt="star" height="16" align="left"/>
+                        </a>
+                    </sec:authorize>
+                    <sec:authorize access="isAuthenticated()">
+                        <a href="/${searchbox.getSlug() }/${preset.getSlug() }/${process}/mark_favorite?id=${hit.getId()}&amp;title=${hit.getTitle()}&amp;field=${hit.idFieldName}" style="vertical-align: bottom" title="Click to store in your favorites">
+                            <spring:url value="/assets/images/star_off.png" var="images" />
+                            <img src='${images}' alt="star" height="16" align="left"/>
+                        </a>
+                    </sec:authorize>
+                </c:otherwise>
+            </c:choose>
+            <span style="display:inline-block; width: 10px;">&#160;</span>
+            <sbx:title hit="${hit}" />
+        </h4>
+        <p><sbx:snippet hit="${hit}" field="cordisSnippet"/></p>
+
+
+        <sbx:tagAttribute limit="1" label="Program"
+                          values="${hit.fieldValues['cordisProgram']}" filter="callIdentifier"
+                          cssClass="${hit.fieldValues['cordisProgram']}"
+                          />
+
+
+        <sbx:tagAttribute limit="1" label="Year"
+                          filter="cordisStartYear" values="${hit.fieldValues['cordisStartYear']}" />
+
+    </div>
+
 </jsp:root>

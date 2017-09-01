@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -28,8 +29,11 @@ import org.springframework.stereotype.Controller;
 
 @Configuration
 @EnableSpringConfigured
-@PropertySource("classpath:application.properties")
-@ComponentScan(basePackages = { "com.searchbox" }, excludeFilters = {
+@PropertySources({
+		@PropertySource("classpath:application.properties"),
+		@PropertySource("classpath:auth0.properties")
+})
+@ComponentScan(basePackages = { "com.searchbox","com.auth0.web" }, excludeFilters = {
     @ComponentScan.Filter(value = Controller.class, type = FilterType.ANNOTATION),
     @ComponentScan.Filter(pattern = { "com\\.searchbox\\.framework\\.web\\..*" }, type = FilterType.REGEX),
     @ComponentScan.Filter(pattern = { "com\\.searchbox\\.framework\\.bootstrap\\..*" }, type = FilterType.REGEX) })

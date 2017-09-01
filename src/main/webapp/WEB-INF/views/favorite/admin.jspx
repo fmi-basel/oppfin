@@ -1,0 +1,238 @@
+<jsp:root version="2.0" xmlns:jsp="http://java.sun.com/JSP/Page"
+ xmlns:c="http://java.sun.com/jsp/jstl/core"
+ xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+ xmlns:spring="http://www.springframework.org/tags"
+ xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+ xmlns:form="http://www.springframework.org/tags/form"
+ xmlns:sbx="urn:jsptagdir:/WEB-INF/tags/sbx"
+ xmlns:helper="http://www.searchbox.com/helper">
+
+ <jsp:output omit-xml-declaration="yes" />
+ <jsp:output doctype-root-element="HTML"
+  doctype-system="about:legacy-compat" />
+
+ <jsp:directive.page contentType="text/html;charset=UTF-8" />
+ <jsp:directive.page pageEncoding="UTF-8" />
+ <c:set scope="request" var="adminView" value="true" />
+
+ <html>
+
+<head>
+<jsp:include page="/WEB-INF/views/common/_head.jspx" />
+<jsp:include page="/WEB-INF/views/common/_admin-scripts.jspx" />
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.collection-synchronize').click(function(e, xhr) {
+      e.preventDefault();
+      var button = $(this)
+      var loadurl = $(this).attr("data-synch")
+      console.log("Wassup: " + loadurl)
+      $.post(loadurl, function(data) {
+        console.log(data);
+        location.reload();
+      });
+    });
+  });
+</script>
+
+
+</head>
+
+<body>
+ <div id="wrap">
+
+  <jsp:include page="/WEB-INF/views/common/_navbar.jspx" />
+
+  <div id="main-content" role="main">
+
+   <div class="row" id="main-search-content">
+    <div class="row" id="first-row">
+   
+     <div class="row" id="search-status-bar">
+            <div class="col-md-3 col-sm-5 col-left" id="main-col-left">
+             &#160; 
+            </div>
+            <div class="col-md-2 col-md-push-5 col-sm-2 col-sm-push-5 col-xs-5 sort-col">
+             <div class="btn-group" id="sort-combo">
+                <form:form action="/favorite/downloadCSV?sort=${sort}" method="post" id="downloadCSV">
+                     <button class="btn btn-xs btn-default">
+                     Download CSV 
+                    </button>
+                </form:form>
+            </div>
+            </div>
+         
+    </div>
+    </div>
+
+      
+    <div class="row" id="info">
+
+     <!-- LEFT COLUMN  -->
+     <div class="col-md-3">
+
+      <div class="block" id="instance">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+         <b>Server</b>
+        </div>
+        <div class="panel-body">
+         <div class="content">
+          <ul class="data">
+           <li><dl>
+             <dt>Host</dt>
+             <dd>
+              <c:url value="/" />
+             </dd>
+            </dl></li>
+           <li><dl>
+             <dt>
+              <span>Version</span>
+             </dt>
+             <dd class="version">1.0-SNAPSHOT-SEARCHBOX</dd>
+            </dl></li>
+          </ul>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+
+
+     <!-- MAIN COLUMN  -->
+     <div class="col-md-7" id="collections">
+      <div class="row">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+         Available marked favorite
+        </div>
+        <div class="panel-body">
+         <table class="table table-striped">
+          <thead>
+           <tr>
+            <th>name</th>
+            <c:set var="s" value="${sort=='asc'?'desc':asc}"/>
+            <th width="13%"><a href="/favorite/admin?sort=${s}">
+                    time marked<spring:url
+                  value="/assets/images/${sort=='asc'?'asc.png':'desc.png'}"
+                  var="img" /> &#160;<img src='${img}' alt="${sort}"/>
+                </a></th>
+           </tr>
+          </thead>
+          <tbody>
+           <c:forEach var="fav" items="${favorites}">
+                <tr>
+                    <td>
+                        <div class="result">
+                            <h4 class="result-title">
+                                <c:choose>
+                                    <c:when test="${not empty fav.getFavoriteId()}">
+                                        <a href="#">${fav.getTitle()}</a>
+                                    </c:when>
+                                </c:choose>
+                            </h4>
+
+                        </div>
+                        <div class="result"></div>
+                    </td>
+                    <td>${fav.getTime()}</td>
+                </tr>
+            </c:forEach>
+          </tbody>
+         </table>
+            <form method="get" action="/favorite/admin">
+                <input type='hidden' name="sort" value="${sort}"/>
+            <c:if test="${favoriteCount > favoriteTable.pageSize}">
+                <c:set var="maxPage" value="${favoriteCount/favoriteTable.pageSize}" />
+                <c:set var="beginPage"
+                 value="${(favoriteTable.pageNumber - 3) > 0 ? (favoriteTable.pageNumber - 3) : 0}" />
+                <c:set var="endPage"
+                 value="${maxPage > (favoriteTable.pageNumber + 3) ?  (favoriteTable.pageNumber + 3) : maxPage}" />
+                <c:set var="nextPage"
+                 value="${(favoriteTable.pageNumber + 1) > maxPage ? 0 : (favoriteTable.pageNumber + 1)}" />
+                <c:set var="prevPage" value="${favoriteTable.pageNumber - 1}" />
+
+                <!--
+                 Begin ${beginPage} - end ${endPage} - max ${maxPage} - prev ${prevPage} - next ${nextPage} - current ${element.currentPage}
+              -->
+
+                <div id="basic-pagination">
+
+                 <c:if test="${prevPage >= 0}">
+                  <a href="#" onclick="submitForm('favoriteTable_page', ${prevPage})"
+                   class="prevLink">Prev</a>
+                 </c:if>
+
+                 <c:if test="${beginPage>1}">
+                  <span class="step gap">..</span>
+                 </c:if>
+
+                 <c:forEach var="value" begin="${beginPage}" end="${endPage}"
+                  varStatus="i">
+                  <c:choose>
+                   <c:when test="${i.index == favoriteTable.pageNumber}">
+                    <span class="currentStep">${i.index+1}</span>
+                   </c:when>
+                   <c:otherwise>
+                    <a href="#" class="step"
+                     onclick="submitForm('favoriteTable_page', ${i.index})">${i.index+1}</a>
+                   </c:otherwise>
+                  </c:choose>
+                 </c:forEach>
+
+                 <c:if test="${(maxPage-1)>endPage}">
+                  <span class="step gap">..</span>
+                 </c:if>
+
+                 <c:if test="${nextPage > 0}">
+                  <a class="nextLink" href="#"
+                   onclick="submitForm('favoriteTable_page', ${nextPage})">Next</a>
+                 </c:if>
+                </div>
+               </c:if>
+            </form>
+        </div>
+       </div>
+      </div>
+     </div>
+
+
+    </div>
+
+   </div>
+  </div>
+ </div>
+
+ <style>
+ul.data {
+ list-style: none;
+ padding-left: 5px;
+}
+
+ul.data dl {
+ margin-bottom: 5px;
+ float: left;
+ width: 100%;
+ clear: both;
+}
+
+ul.data li dt {
+ float: left;
+ white-space: nowrap;
+ width: 20%;
+ min-width: 90px;
+}
+
+ul.data li dd {
+ float: left;
+ text-overflow: ellipsis;
+ overflow: hidden;
+ white-space: nowrap;
+ max-width: 60%;
+}
+</style>
+</body>
+ </html>
+</jsp:root>
