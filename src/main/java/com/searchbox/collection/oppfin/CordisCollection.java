@@ -120,13 +120,13 @@ public class CordisCollection extends AbstractBatchCollection implements
             Iterator iterator;
 
             {
-//TODO                String url_fp7 = env.getProperty("data.fp7");
-//                download(url_fp7);
-//                String url_h2020 = env.getProperty("data.h2020");
-//                download(url_h2020);
+                String url_fp7 = env.getProperty("data.fp7");
+                download(url_fp7);
+                String url_h2020 = env.getProperty("data.h2020");
+                download(url_h2020);
                 LOGGER.info("Starting collection / ItemReader");
-//                String strFolder = context.getResource("classpath:data/xml").getFile().getAbsolutePath();
-                String strFolder = "/tmp/xml";
+                String strFolder = context.getResource("classpath:data/xml").getFile().getAbsolutePath();
+//                String strFolder = "/tmp/xml";
                 LOGGER.info("=====>xml folder:" + strFolder);
                 File folder = new File(strFolder);
                 File[] fXml = folder.listFiles();
@@ -135,8 +135,9 @@ public class CordisCollection extends AbstractBatchCollection implements
                     JSONObject json = readFromFile(fXml[i]);
                     if (json == null) {
                         continue;
+                    } else {
+                        cordisData.add(json);
                     }
-                    cordisData.add(json);
                 }
                 LOGGER.info("=====>Cordis data is parsed {}", cordisData.size());
                 iterator = cordisData.iterator();
@@ -287,19 +288,34 @@ public class CordisCollection extends AbstractBatchCollection implements
                     json.put("program", value);
                 }
             }
+            try{
             String id = document.getElementsByTagName("reference").item(0).getTextContent();
             json.put("id", id);
-            String startDate="";
+            if (id == null) {
+                LOGGER.error("=====>id null:" + file.getName());
+            }
+            
+            } catch (Exception ex) {
+                LOGGER.error("reference error:" + file.getName());
+                return null;
+            }
+            String startDate = "";
             try {
                 startDate = document.getElementsByTagName("startDate").item(0).getTextContent();
                 json.put("start_year", startDate.substring(0, 4));
                 json.put("projectstartdate", dfSource.parse(startDate));
             } catch (Exception ex) {
+                LOGGER.error("startDate error:" + file.getName());
                 return null;
             }
+            try{
             String ProjectFunding = document.getElementsByTagName("totalCost").item(0).getTextContent();
             json.put("projectfunding", ProjectFunding);
 
+            } catch (Exception ex) {
+                LOGGER.error("totalCost error:" + file.getName());
+                return null;
+            }
             NodeList categogries = document.getElementsByTagName("category");
             String contactType = "";
             for (int i = 0; i < categogries.getLength(); i++) {
@@ -323,8 +339,14 @@ public class CordisCollection extends AbstractBatchCollection implements
             json.put("program", program);
             String totalCost = document.getElementsByTagName("totalCost").item(0).getTextContent();
             json.put("projectcost", totalCost);
+            try{
             String projectEndDate = document.getElementsByTagName("endDate").item(0).getTextContent();
             json.put("projectenddate", dfSource.parse(projectEndDate));
+            
+            } catch (Exception ex) {
+                LOGGER.error("endDate error:" + file.getName());
+                return null;
+            }
             String projectDuration = document.getElementsByTagName("duration").item(0).getTextContent();
             json.put("projectduration", projectDuration);
             String teaser = document.getElementsByTagName("teaser").item(0).getTextContent();
@@ -351,15 +373,19 @@ public class CordisCollection extends AbstractBatchCollection implements
             }
             NodeList nodeTitle = document.getElementsByTagName("title");
             String title = nodeTitle.item(0).getTextContent();
+            if (title == null || title.equals("")) {
+                LOGGER.error("title null:" + file.getName());
+                return null;
+            }
             json.put("title", title);
             NodeList callTitle = document.getElementsByTagName("call");
             for (int i = 0; i < callTitle.getLength(); i++) {
                 Element e = (Element) callTitle.item(i);
                 if ("relatedCall".equals(e.getAttribute("type"))) {
                     try {
-                        if(e.getElementsByTagName("title")!=null){
-                        String cordisCallTitle = e.getElementsByTagName("title").item(0).getTextContent();
-                        json.put("cordisCallTitle", cordisCallTitle);
+                        if (e.getElementsByTagName("title") != null) {
+                            String cordisCallTitle = e.getElementsByTagName("title").item(0).getTextContent();
+                            json.put("cordisCallTitle", cordisCallTitle);
                         } else {
                             json.put("cordisCallTitle", "");
                         }
@@ -421,6 +447,8 @@ public class CordisCollection extends AbstractBatchCollection implements
             json.put("category", category);
         } catch (Exception e) {
             LOGGER.error("readFile", e);
+            LOGGER.info(" file error:" + file.getName());
+            return null;
         }
         return json;
     }
