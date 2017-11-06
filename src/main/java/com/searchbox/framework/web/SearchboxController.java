@@ -200,14 +200,14 @@ public class SearchboxController {
             LOGGER.error("Searchbox {} not found!", searchbox);
             return new ModelAndView(new RedirectView("/", true));
         }
-        LOGGER.info("=================>>>>>>>>search page for: {} with preset: {} and process: {}",
+        LOGGER.info("search page for: {} with preset: {} and process: {}",
                 searchbox.getName(), preset.getLabel(), process);
         //refresh favorite
             favorites = getFavorites();
 
         // TODO check if we have a view for that process.
         model.setViewName(this.getViewFolder() + "/" + process);
-        LOGGER.info("==============exView:" + this.getViewFolder() + "/" + process);
+        LOGGER.info("exView:" + this.getViewFolder() + "/" + process);
         Set<SearchElement> resultElements = executeRequest(searchbox, preset,
                 process, conditions, collector);
 
@@ -234,7 +234,7 @@ public class SearchboxController {
 
         // TODO check if we have a view for that process.
         model.setViewName(this.getViewFolder() + "/" + process);
-        LOGGER.info("==============JSON View:" + this.getViewFolder() + "/" + process);
+        LOGGER.info("JSON View:" + this.getViewFolder() + "/" + process);
         //TODO: Make the JSON view- http://www.javablog.fr/javaspringjson-generate-json-withwithout-viewresolver-jsonview-with-json-lib-2-3-jdk15.html
         Set<SearchElement> resultElements = executeRequest(searchbox, preset,
                 process, conditions, collector);
@@ -310,7 +310,7 @@ public class SearchboxController {
         }
 
         if (retry) {
-            LOGGER.debug("========>Start retry");
+            LOGGER.debug("Start retry");
             LOGGER.debug("Current SearchEngine: {}", searchEngine);
             LOGGER.debug("Current Collection: {}", collection);
 
@@ -325,13 +325,11 @@ public class SearchboxController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             UserEntity user = (UserEntity) authentication.getPrincipal();
-            LOGGER.info("=====>userId:" + user.getId());
             List<UserFavoriteEntity> list = service.findFavoriteByUserId(user);
             for (int i = 0; i < list.size(); i++) {
                 UserFavoriteEntity u = list.get(i);
                 String uid = u.getFavoriteId();
                 param.add(uid);
-                LOGGER.info("=====>userFav:" + uid);
             }
 
         }

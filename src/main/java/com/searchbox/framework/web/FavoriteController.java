@@ -97,14 +97,9 @@ public class FavoriteController {
 //        ModelAndView redirect = new ModelAndView(new RedirectView("/"
 //                + searchbox.getSlug() + "/" + preset.getSlug() + "/search" , true));
 //        String redirect = "redirect:/" + preset.getSlug() + "/search";
-        logger.info("===========Mark Favorite=============");
-        logger.info("=====>opp id:" + id);
-        logger.info("=====>opp title:" + title);
-        logger.info("=====>opp fieldId:" + field);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             UserEntity user = (UserEntity) authentication.getPrincipal();
-            logger.info("=====>userId:" + user.getId());
             List<UserFavoriteEntity> list = service.findFavoriteByUserId(user);
             for (int i = 0; i < list.size(); i++) {
                 UserFavoriteEntity u = list.get(i);
@@ -208,7 +203,6 @@ public class FavoriteController {
         }
 
         if (retry) {
-            logger.debug("========>Start retry");
             logger.debug("Current SearchEngine: {}", searchEngine);
             logger.debug("Current Collection: {}", collection);
 
@@ -223,14 +217,11 @@ public class FavoriteController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             UserEntity user = (UserEntity) authentication.getPrincipal();
-            logger.info("=====>Get Fav ID");
-            logger.info("=====>userId:" + user.getId());
             List<UserFavoriteEntity> list = service.findFavoriteByUserId(user);
             for (int i = 0; i < list.size(); i++) {
                 UserFavoriteEntity u = list.get(i);
                 String uid = u.getFavoriteId();
                 param.add(uid);
-                logger.info("=====>userFav:" + uid);
             }
 
         }
@@ -239,9 +230,6 @@ public class FavoriteController {
 
     @RequestMapping(value = "/favorite/list_favorite", method = RequestMethod.GET)
     public ModelAndView listFavorite(@RequestParam PresetEntity preset, @RequestParam SearchboxEntity searchbox, ModelAndView model) {
-        logger.info("===========List Favorite=============");
-        logger.info("===========>Preset==" + preset);
-        logger.info("===========>Searchbox==" + searchbox);
         List<String> idFields = new ArrayList<String>();
         String presetSlug = "all";
         if (preset != null) {
@@ -259,7 +247,7 @@ public class FavoriteController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             UserEntity user = (UserEntity) authentication.getPrincipal();
-            logger.info("=====>userId:" + user.getId());
+
             if ("all".equals(presetSlug)) {
                 list = service.findFavoriteByUserId(user);
             } else {
