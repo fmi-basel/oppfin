@@ -231,8 +231,8 @@ public class EENCollection extends AbstractBatchCollection implements
                     while (start.before(DateUtils.addYears(date, 1))
                             && profiles.isEmpty()) {
                         Date end = DateUtils.addDays(start, 5);
-                        EENCollection.LOGGER.info("Fetching EEN from " + dfmt.format(start)
-                                + " to " + dfmt.format(end));
+                        EENCollection.LOGGER.info("Fetching EEN profiles from deadline date " + dfmt.format(start)
+                                + " to deadline date" + dfmt.format(end));
                         fillProfiles(start, end);
                         start = end;
                     }
