@@ -109,7 +109,7 @@ public abstract class AbstractBatchCollection extends DefaultCollection
 
   @Override
   public void beforeJob(JobExecution jobExecution) {
-    LOGGER.info("Starting Batch Job");
+    LOGGER.info("Starting Batch Job - "+this.getClass().getSimpleName());
 
   }
 
